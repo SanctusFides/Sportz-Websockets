@@ -2,6 +2,7 @@ import express from 'express';
 import {matchRouter} from "./routes/matches.js";
 import * as http from "node:http";
 import {attachWebSocketServer} from "./ws/server.js";
+import {securityMiddleware} from "./arcjet.js";
 
 const app = express();
 const PORT = Number(process.env.PORT || 8000);
@@ -13,6 +14,8 @@ const server = http.createServer(app);
 app.get('/', (req, res) => {
   res.send('Hello World!');
 })
+
+app.use(securityMiddleware());
 
 app.use('/matches', matchRouter);
 // Initializes & readies the broadcastMatchCreated function at the same time
